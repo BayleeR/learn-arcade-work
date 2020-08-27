@@ -1,1 +1,5 @@
-Good morning, everyone
+print("Hello, everyone, this is my first lab entry in Intro to Programing!")
+print("This class marks the end of a very long day for me.")
+print("My roommate and I had to go to early morning lifting.")
+print("Students on campus are getting alerts from the \"Simpson Dashboard\" for active cases.")
+print("There has been four positive coronavirus cases since the start of school.")
