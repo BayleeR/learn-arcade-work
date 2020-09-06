@@ -59,14 +59,18 @@ arcade.draw_triangle_filled(250, 500, 50, 400, 450, 400, arcade.color.DARK_BROWN
 arcade.draw_lrtb_rectangle_filled(130, 200, 340, 265, arcade.color.GLITTER)
 arcade.draw_line(165, 340, 165, 265, arcade.color.DIM_GRAY, 4)
 arcade.draw_line(130, 305, 200, 305, arcade.color.DIM_GRAY, 4)
+arcade.draw_lrtb_rectangle_outline(125, 205, 345, 260, arcade.color.WHITE, 4)
 # Right window
 arcade.draw_lrtb_rectangle_filled(300, 370, 340, 265, arcade.color.GLITTER)
 arcade.draw_line(335, 340, 335, 265, arcade.color.DIM_GRAY, 4)
 arcade.draw_line(300, 305, 370, 305, arcade.color.DIM_GRAY, 4)
+arcade.draw_lrtb_rectangle_outline(295, 375, 345, 260, arcade.color.WHITE, 4)
 # Door
 arcade.draw_lrtb_rectangle_filled(210, 290, 230, 120, arcade.color.CG_RED)
+# Door outline
+arcade.draw_lrtb_rectangle_filled(230, 270, 210, 140, arcade.color.CORAL_RED)
 # Door knob
-arcade.draw_ellipse_filled(265, 190, 10, 10, arcade.color.KOBE)
+arcade.draw_ellipse_filled(275, 180, 10, 10, arcade.color.KOBE)
 
 # Left bush
 arcade.draw_ellipse_filled(140, 140, 115, 70, arcade.color.JUNE_BUD)
