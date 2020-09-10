@@ -78,6 +78,10 @@ arcade.draw_ellipse_filled(140, 140, 115, 70, arcade.color.JUNE_BUD)
 # Right bush
 arcade.draw_ellipse_filled(360, 140, 115, 70, arcade.color.JUNE_BUD)
 
+# Tree
+arcade.draw_lrtb_rectangle_filled(600, 625, 200, 150, arcade.color.BISTRE_BROWN)
+arcade.draw_triangle_filled(612, 300, 570, 200, 655, 200, arcade.color.ARMY_GREEN)
+
 # Car
 # Car body
 arcade.draw_polygon_filled(((580, 110),
@@ -95,9 +99,9 @@ arcade.draw_circle_filled(610, 110, 15, arcade.color.BLACK_OLIVE)
 # Right car wheel
 arcade.draw_circle_filled(690, 110, 15, arcade.color.BLACK_OLIVE)
 # left car window
-arcade.draw_lrtb_rectangle_filled(620, 641, 180, 150, arcade.color.ASH_GREY)
+arcade.draw_rectangle_filled( 630, 165, 21, 30, arcade.color.ASH_GREY)
 # right car window
-arcade.draw_lrtb_rectangle_filled(654, 675, 180, 150, arcade.color.ASH_GREY)
+arcade.draw_lrtb_rectangle_filled(664, 165, 21, 30, arcade.color.ASH_GREY)
 
 arcade.finish_render()
 
