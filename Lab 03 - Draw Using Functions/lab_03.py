@@ -25,16 +25,24 @@ def draw_car(x, y):
                                 arcade.color.AQUA)
 
     # Left car wheel
-    arcade.draw_circle_filled(610 + x - 650, 110 + y - 150, 15, arcade.color.BLACK_OLIVE)
+    arcade.draw_circle_filled(x - 40, y - 40, 15, arcade.color.BLACK_OLIVE)
 
     # Right car wheel
-    arcade.draw_circle_filled(690 + x - 650, 110 + y - 150, 15, arcade.color.BLACK_OLIVE)
+    arcade.draw_circle_filled(x + 40, y - 40, 15, arcade.color.BLACK_OLIVE)
 
     # left car window
-    arcade.draw_rectangle_filled(630 + x - 650, 165 + y - 150, 21, 30, arcade.color.ASH_GREY)
+    arcade.draw_rectangle_filled(x - 20, y + 15, 21, 30, arcade.color.ASH_GREY)
 
     # right car window
-    arcade.draw_rectangle_filled(664 + x - 650, 165 + y - 150, 21, 30, arcade.color.ASH_GREY)
+    arcade.draw_rectangle_filled(x + 14, y + 15, 21, 30, arcade.color.ASH_GREY)
+
+
+def draw_tree(x, y):
+    """Draw tree"""
+    arcade.draw_lrtb_rectangle_filled(x + 0, y - 50, 25, 50, arcade.color.BISTRE_BROWN)
+    arcade.draw_triangle_filled(x + 0, y + 75, x - 42, y - 25, x + 43, y - 25, arcade.color.ARMY_GREEN)
+    arcade.draw_triangle_filled(x + 0, y + 75, x - 37, y + 0, x + 38, y + 0, arcade.color.ARMY_GREEN)
+    arcade.draw_triangle_filled(x + 0, y + 75, x - 32, y + 25, x + 33, y + 25, arcade.color.ARMY_GREEN)
 
 
 def main():
@@ -47,6 +55,7 @@ def main():
 
     draw_concrete()
     draw_car(450, 50)
+    draw_tree(500, 300)
 
 
 
