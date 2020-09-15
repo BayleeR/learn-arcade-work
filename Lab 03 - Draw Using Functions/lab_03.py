@@ -39,7 +39,7 @@ def draw_car(x, y):
 
 def draw_tree(x, y):
     """Draw tree"""
-    arcade.draw_lrtb_rectangle_filled(x + 0, y - 50, 25, 50, arcade.color.BISTRE_BROWN)
+    arcade.draw_rectangle_filled(x + 0, y - 50, 25, 50, arcade.color.BISTRE_BROWN)
     arcade.draw_triangle_filled(x + 0, y + 75, x - 42, y - 25, x + 43, y - 25, arcade.color.ARMY_GREEN)
     arcade.draw_triangle_filled(x + 0, y + 75, x - 37, y + 0, x + 38, y + 0, arcade.color.ARMY_GREEN)
     arcade.draw_triangle_filled(x + 0, y + 75, x - 32, y + 25, x + 33, y + 25, arcade.color.ARMY_GREEN)
@@ -58,8 +58,6 @@ def main():
 
     draw_concrete()
     draw_car(450, 50)
-    draw_tree(500, 300)
-
 
 
     # Sky
@@ -130,6 +128,10 @@ def main():
 
     # Right bush
     arcade.draw_ellipse_filled(360, 140, 115, 70, arcade.color.JUNE_BUD)
+
+
+    draw_tree(600, 200)
+    draw_tree(660, 180)
 
 
     arcade.finish_render()
