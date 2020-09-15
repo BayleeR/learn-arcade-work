@@ -45,7 +45,11 @@ def draw_tree(x, y):
     arcade.draw_triangle_filled(x + 0, y + 75, x - 32, y + 25, x + 33, y + 25, arcade.color.ARMY_GREEN)
 
 
-
+def draw_bird(x, y):
+    """Draw a bird"""
+    arcade.draw_circle_filled(x + 0, y + 2, 8, arcade.color.CHARLESTON_GREEN)
+    arcade.draw_arc_outline(x - 17, y - 3, 35, 30, arcade.color.CHARLESTON_GREEN, 0, 180, 5)
+    arcade.draw_arc_outline(x + 18, y - 3, 35, 30, arcade.color.CHARLESTON_GREEN, 0, 180, 5)
 
 
 def main():
@@ -57,13 +61,19 @@ def main():
 
 
     draw_concrete()
-    draw_car(450, 50)
-
+    draw_car(320, 50)
+    draw_car(680, 60)
 
     # Sky
     arcade.draw_lrtb_rectangle_filled(0, 799, 450, 200, arcade.color.SAE)
     arcade.draw_lrtb_rectangle_filled(0, 799, 375, 200, arcade.color.AMBER)
     arcade.draw_lrtb_rectangle_filled(0, 799, 225, 200, arcade.color.MEDIUM_VERMILION)
+
+
+    draw_bird(550, 300)
+    draw_bird(650, 320)
+    draw_bird(680, 400)
+
 
     # Sun
     arcade.draw_circle_filled(550, 200, 80, arcade.color.MELLOW_YELLOW)
@@ -71,27 +81,15 @@ def main():
 
     # Cloud 1
     arcade.draw_ellipse_filled(500, 550, 140, 70, arcade.color.ISABELLINE)
+
      #Cloud 2
     arcade.draw_ellipse_filled(650, 500, 100, 50, arcade.color.ISABELLINE)
 
     # Cloud 3
     arcade.draw_ellipse_filled(100, 530, 120, 70, arcade.color.ISABELLINE)
 
-    # Bird1
-    arcade.draw_arc_outline(600, 350, 35, 30, arcade.color.CHARLESTON_GREEN, 0, 180, 4)
-    arcade.draw_arc_outline(635, 350, 35, 30, arcade.color.CHARLESTON_GREEN, 0, 180, 4)
-
-    # Bird2
-    arcade.draw_arc_outline(550, 410, 30, 25, arcade.color.CHARLESTON_GREEN, 0, 180, 4)
-    arcade.draw_arc_outline(580, 410, 30, 25, arcade.color.CHARLESTON_GREEN, 0, 180, 4)
-
-    # Bird3
-    arcade.draw_arc_outline(525, 310, 15, 10, arcade.color.CHARLESTON_GREEN, 0, 180, 4)
-    arcade.draw_arc_outline(540, 310, 15, 10, arcade.color.CHARLESTON_GREEN, 0, 180, 4)
-
     # Grass
     arcade.draw_lrtb_rectangle_filled(0, 800, 200, 100, arcade.color. BITTER_LIME)
-
 
     # Sidewalk
     arcade.draw_polygon_filled(((210, 120),
@@ -104,22 +102,29 @@ def main():
     # House building
     # Building
     arcade.draw_lrtb_rectangle_filled(75, 425, 400, 120, arcade.color.FRENCH_BEIGE)
+
     # Roof
     arcade.draw_triangle_filled(250, 500, 50, 400, 450, 400, arcade.color.DARK_BROWN)
+
     # Left window
     arcade.draw_lrtb_rectangle_filled(130, 200, 340, 265, arcade.color.GLITTER)
+
     arcade.draw_line(165, 340, 165, 265, arcade.color.DIM_GRAY, 4)
     arcade.draw_line(130, 305, 200, 305, arcade.color.DIM_GRAY, 4)
     arcade.draw_lrtb_rectangle_outline(125, 205, 345, 260, arcade.color.WHITE, 4)
+
     # Right window
     arcade.draw_lrtb_rectangle_filled(300, 370, 340, 265, arcade.color.GLITTER)
     arcade.draw_line(335, 340, 335, 265, arcade.color.DIM_GRAY, 4)
     arcade.draw_line(300, 305, 370, 305, arcade.color.DIM_GRAY, 4)
     arcade.draw_lrtb_rectangle_outline(295, 375, 345, 260, arcade.color.WHITE, 4)
+
     # Door
     arcade.draw_lrtb_rectangle_filled(210, 290, 230, 120, arcade.color.CG_RED)
+
     # Door outline
     arcade.draw_lrtb_rectangle_filled(230, 270, 210, 140, arcade.color.CORAL_RED)
+
     # Door knob
     arcade.draw_ellipse_filled(275, 180, 10, 10, arcade.color.KOBE)
 
