@@ -45,6 +45,9 @@ def draw_tree(x, y):
     arcade.draw_triangle_filled(x + 0, y + 75, x - 32, y + 25, x + 33, y + 25, arcade.color.ARMY_GREEN)
 
 
+
+
+
 def main():
     arcade.open_window(800, 600, "My sample window")
 

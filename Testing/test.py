@@ -1,5 +1,5 @@
-def f():
-
-print("f")
-
-
+name = "mary"
+if name.lower() == "bob" or "sam":
+    print("Yes")
+else:
+    print("No")
