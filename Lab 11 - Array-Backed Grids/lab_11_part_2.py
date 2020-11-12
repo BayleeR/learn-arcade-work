@@ -112,55 +112,29 @@ class MyGame(arcade.Window):
                     selected_square_count += 1
         print("There are", selected_square_count, "cells selected.")"""
 
-        # second section of part two
-        """cells_in_row = 0
+        selected_cells_total = 0
+        cells_in_row = 0
         row_number = 0
         for row in range(ROW_COUNT):
             row_number += 1
             for column in range(COLUMN_COUNT):
                 if self.grid[row][column] == 1:
                     cells_in_row += 1
+                    selected_cells_total = 1
             print("Row", row_number, "has", cells_in_row, "cells selected.")
-            cells_in_row = 0"""
+            cells_in_row = 0
 
-        # Update the code so that it prints the count in both rows and columns: (1 pt)
-        # section three of part two
-        """cells_in_row = 0
-        row_number = 0
         cells_in_column = 0
         column_number = 0
-        for row in range(ROW_COUNT):
-            row_number += 1
-            for column in range(COLUMN_COUNT):
-                column_number += 1
+        for column in range(COLUMN_COUNT):
+            column_number += 1
+            for row in range(ROW_COUNT):
                 if self.grid[row][column] == 1:
-                    cells_in_row += 1
                     cells_in_column += 1
-            print("Column", column_number, "has", cells_in_row, "cells selected.")
-            print("Row", row_number, "has", cells_in_row, "cells selected.")
-            cells_in_row = 0
-            cells_in_column = 0"""
-
-        cells_in_row = 0
-        row_number = 0
-        for row in range(ROW_COUNT):
-            row_number += 1
-            for column in range(COLUMN_COUNT):
-                if self.grid[row][column] == 1:
-                    cells_in_row += 1
-            print("Row", row_number, "has", cells_in_row, "cells selected.")
-            cells_in_row = 0
-
-        cells_in_row = 0
-        row_number = 0
-        for row in range(ROW_COUNT):
-            row_number += 1
-            for column in range(COLUMN_COUNT):
-                if self.grid[row][column] == 1:
-                    cells_in_row += 1
-            print("Row", row_number, "has", cells_in_row, "cells selected.")
-            cells_in_row = 0
-
+                    selected_cells_total = 1
+            print("Column", column_number, "has", cells_in_column, "cells selected.")
+            cells_in_column = 0
+        print("There are", selected_cells_total, "cells selected in total.")
 
 
 
