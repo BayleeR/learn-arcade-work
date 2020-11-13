@@ -27,7 +27,7 @@ TEXTURE_RIGHT = 1
 FLOWER_COIN_COUNT = 10
 
 
-"""class Player(arcade.Sprite):
+class Player(arcade.Sprite):
 
     def __init__(self):
         super().__init__()
@@ -52,10 +52,10 @@ FLOWER_COIN_COUNT = 10
         # self.center_y += self.change_y
         
         # Figure out if we should face left or right
-        if self.player_sprite.change_x < 0:
+        if self.change_x < 0:
             self.texture = self.textures[TEXTURE_LEFT]
-        elif self.player_sprite.change_x > 0:
-            self.texture = self.textures[TEXTURE_RIGHT]"""
+        elif self.change_x > 0:
+            self.texture = self.textures[TEXTURE_RIGHT]
 
 
 class Room:
@@ -138,14 +138,6 @@ def setup_room_1():
 
         # Add the coin to the lists
         room.flower_coin_list.append(flower_coin)
-
-        room.flower_coin_list.update()
-
-    hit_list = arcade.check_for_collision_with_list(room.player_sprite,
-                                                    room.flower_coin_list)
-
-    for flower_coin in hit_list:
-        flower_coin.remove_from_sprite_lists()
 
 
     # Load the background image for this level.
@@ -246,7 +238,7 @@ class MyGame(arcade.Window):
         # self.flower_coin_list = arcade.SpriteList()
 
         # Set up the player
-        self.player_sprite = arcade.Sprite("player-right.png", SPRITE_SCALING)
+        self.player_sprite = Player()
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 100
         self.player_list.append(self.player_sprite)
@@ -310,7 +302,7 @@ class MyGame(arcade.Window):
         # above for each list.
 
         self.player_list.draw()
-        self.flower_coin_list.draw()
+        self.rooms[self.current_room].flower_coin_list.draw()
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -338,6 +330,7 @@ class MyGame(arcade.Window):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.physics_engine.update()
+        self.player_sprite.update()
 
         # -----------------------------------------------------------------------------------------------
         """self.player_sprite.center_x += self.player_sprite.change_x
@@ -362,12 +355,11 @@ class MyGame(arcade.Window):
                                                              self.rooms[self.current_room].wall_list)
             self.player_sprite.center_x = SCREEN_WIDTH
 
-        """"# Coins
+        # Coins
         # flower coins
-        self.flower_coin_list.update()
 
         hit_list = arcade.check_for_collision_with_list(self.player_sprite,
-                                                        self.coin_list)
+                                                        self.rooms[self.current_room].flower_coin_list)
 
         for flower_coin in hit_list:
             flower_coin.remove_from_sprite_lists()
