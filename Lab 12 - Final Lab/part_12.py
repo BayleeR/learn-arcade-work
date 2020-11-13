@@ -7,17 +7,55 @@ python -m arcade.examples.sprite_rooms"""
 
 
 import arcade
+import random
 import os
 
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
+SPRITE_SCALING_FLOWER_COIN = 0.2
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
-SCREEN_WIDTH = SPRITE_SIZE * 14
-SCREEN_HEIGHT = SPRITE_SIZE * 10
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Rooms Example"
 
 MOVEMENT_SPEED = 5
+TEXTURE_LEFT = 0
+TEXTURE_RIGHT = 1
+
+# Coin Count
+FLOWER_COIN_COUNT = 10
+
+
+"""class Player(arcade.Sprite):
+
+    def __init__(self):
+        super().__init__()
+
+        self.scale = SPRITE_SCALING
+        self.textures = []
+
+        # Load a left facing texture and a right facing texture.
+        # flipped_horizontally=True will mirror the image we load.
+        texture = arcade.load_texture("player-left.png")
+        self.textures.append(texture)
+        texture = arcade.load_texture("player-left.png",
+                                      flipped_horizontally=True)
+        self.textures.append(texture)
+
+        # By default, face right.
+        self.texture = texture
+
+    def update(self):
+        
+        # self.center_x += self.change_x
+        # self.center_y += self.change_y
+        
+        # Figure out if we should face left or right
+        if self.player_sprite.change_x < 0:
+            self.texture = self.textures[TEXTURE_LEFT]
+        elif self.player_sprite.change_x > 0:
+            self.texture = self.textures[TEXTURE_RIGHT]"""
 
 
 class Room:
@@ -28,6 +66,9 @@ class Room:
     def __init__(self):
         # You may want many lists. Lists for coins, monsters, etc.
         self.wall_list = None
+        self.flower_coin_list = None
+
+
 
         # This holds the background images. If you don't want changing
         # background images, you can delete this part.
@@ -35,16 +76,16 @@ class Room:
 
 
 def setup_room_1():
-    """
-    Create and return room 1.
+
+    """Create and return room 1.
     If your program gets large, you may want to separate this into different
-    files.
-    """
+    files."""
     room = Room()
 
     """ Set up the game and initialize the variables. """
     # Sprite lists
     room.wall_list = arcade.SpriteList()
+    room.flower_coin_list = arcade.SpriteList()
 
     # -- Set up the walls
     # Create bottom and top row of boxes
@@ -74,6 +115,38 @@ def setup_room_1():
     room.wall_list.append(wall)
 
     # If you want coins or monsters in a level, then add that code here.
+
+    # Scatter the coins
+    # Flower coins
+    for i in range(80):
+        flower_coin = arcade.Sprite("flower_coin.png", SPRITE_SCALING_FLOWER_COIN)
+
+        flower_coin_placed_successfully = False
+
+        while not flower_coin_placed_successfully:
+            # Position the coin
+            flower_coin.center_x = random.randrange(0, 1000)  # SCREEN_WIDTH
+            flower_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+
+            wall_hit_list = arcade.check_for_collision_with_list(flower_coin, room.wall_list)
+
+            flower_coin_hit_list = arcade.check_for_collision_with_list(flower_coin, room.flower_coin_list)
+
+            if len(wall_hit_list) == 0 and len(flower_coin_hit_list) == 0:
+                # It is!
+                flower_coin_placed_successfully = True
+
+        # Add the coin to the lists
+        room.flower_coin_list.append(flower_coin)
+
+        room.flower_coin_list.update()
+
+    hit_list = arcade.check_for_collision_with_list(room.player_sprite,
+                                                    room.flower_coin_list)
+
+    for flower_coin in hit_list:
+        flower_coin.remove_from_sprite_lists()
+
 
     # Load the background image for this level.
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
@@ -139,21 +212,43 @@ class MyGame(arcade.Window):
         os.chdir(file_path)
 
         # Sprite lists
-        self.current_room = 0
+        self.player_list = None
+        self.flower_coin_list = None
 
         # Set up the player
-        self.rooms = None
         self.player_sprite = None
-        self.player_list = None
         self.physics_engine = None
+
+        # Rooms
+        self.current_room = 0
+        self.rooms = None
+
+        # ------------------------------------------------------------------------
+        """self.scale = SPRITE_SCALING
+        self.textures = []
+
+        # Load a left facing texture and a right facing texture.
+        # flipped_horizontally=True will mirror the image we load.
+        texture = arcade.load_texture("player-right.png")
+        self.textures.append(texture)
+        texture = arcade.load_texture("player-right.png",
+                                      flipped_horizontally=True)
+        self.textures.append(texture)
+
+        # By default, face right.
+        self.texture = texture"""
+        # ----------------------------------------------------------------------
 
     def setup(self):
         """ Set up the game and initialize the variables. """
+        # sprite list
+        self.player_list = arcade.SpriteList()
+        # self.flower_coin_list = arcade.SpriteList()
+
         # Set up the player
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
+        self.player_sprite = arcade.Sprite("player-right.png", SPRITE_SCALING)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 100
-        self.player_list = arcade.SpriteList()
         self.player_list.append(self.player_sprite)
 
         # Our list of rooms
@@ -171,6 +266,29 @@ class MyGame(arcade.Window):
 
         # Create a physics engine for this room
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.rooms[self.current_room].wall_list)
+
+        """# Scatter the coins
+        # Flower coins
+        for i in range(80):
+            flower_coin = arcade.Sprite("flower_coin.png", SPRITE_SCALING_FLOWER_COIN)
+
+            flower_coin_placed_successfully = False
+
+            while not flower_coin_placed_successfully:
+                # Position the coin
+                flower_coin.center_x = random.randrange(0, 1000)  # SCREEN_WIDTH
+                flower_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+
+                wall_hit_list = arcade.check_for_collision_with_list(flower_coin, self.wall_list)
+
+                flower_coin_hit_list = arcade.check_for_collision_with_list(flower_coin, self.flower_coin_list)
+
+                if len(wall_hit_list) == 0 and len(flower_coin_hit_list) == 0:
+                    # It is!
+                    flower_coin_placed_successfully = True
+
+            # Add the coin to the lists
+            self.flower_coin_list.append(flower_coin)"""
 
     def on_draw(self):
         """
@@ -192,6 +310,7 @@ class MyGame(arcade.Window):
         # above for each list.
 
         self.player_list.draw()
+        self.flower_coin_list.draw()
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -220,6 +339,16 @@ class MyGame(arcade.Window):
         # example though.)
         self.physics_engine.update()
 
+        # -----------------------------------------------------------------------------------------------
+        """self.player_sprite.center_x += self.player_sprite.change_x
+        self.player_sprite.center_y += self.player_sprite.change_y
+
+        if self.player_sprite.change_x < 0:
+            self.texture = self.textures[TEXTURE_LEFT]
+        elif self.player_sprite.change_x > 0:
+            self.texture = self.textures[TEXTURE_RIGHT]"""
+        #------------------------------------------------------------------------------------------------
+
         # Do some logic here to figure out what room we are in, and if we need to go
         # to a different room.
         if self.player_sprite.center_x > SCREEN_WIDTH and self.current_room == 0:
@@ -232,6 +361,18 @@ class MyGame(arcade.Window):
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
             self.player_sprite.center_x = SCREEN_WIDTH
+
+        """"# Coins
+        # flower coins
+        self.flower_coin_list.update()
+
+        hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                        self.coin_list)
+
+        for flower_coin in hit_list:
+            flower_coin.remove_from_sprite_lists()
+            # self.score += 1
+        # include sounds"""
 
 
 def main():
