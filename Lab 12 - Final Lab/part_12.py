@@ -13,21 +13,25 @@ import os
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
 SPRITE_SCALING_FLOWER_COIN = 0.2
+SPRITE_SCALING_LEAF_COIN = 0.2
 SPRITE_SCALING_SUN_COIN = 0.2
 SPRITE_SCALING_PLAYER = 0.2
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_HEIGHT = 640
 SCREEN_TITLE = "Sprite Rooms Example"
 
 MOVEMENT_SPEED = 5
 TEXTURE_LEFT = 0
 TEXTURE_RIGHT = 1
 
+VIEWPORT_MARGIN = 60
+
 # Coin Count
 FLOWER_COIN_COUNT = 10
 SUN_COIN_COUNT = 10
+LEAF_COIN_COUNT = 10
 
 
 class Player(arcade.Sprite):
@@ -93,23 +97,50 @@ def setup_room_1():
 
 
     # -- Set up the walls
+    # Level 1
+    # left wall
+    for y in range(34, 700, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 34
+        wall.center_y = y
+        room.wall_list.append(wall)
 
-    for x in range(173, 650, 64):
+    # right wall (top part)
+    for y in range(560, 730, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 866
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # right wall (bottom part)
+    for y in range(34, 230, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 866
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    # bottom wall
+    for x in range(34, 900, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 34
+        room.wall_list.append(wall)
+    # top wall
+    for x in range(34, 900, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 738
+        room.wall_list.append(wall)
+
+
+
+    """for x in range(173, 650, 64):
         wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 350
         room.wall_list.append(wall)
 
-
-
-
-
-
-
-
     # Create bottom and top row of boxes
     # This y loops a list of two, the coordinate 0, and just under the top of window
-
     # Create left and right column of boxes
     for x in (0, SCREEN_WIDTH - SPRITE_SIZE):
         # Loop for each box going across
@@ -120,7 +151,6 @@ def setup_room_1():
                 wall.left = x
                 wall.bottom = y
                 room.wall_list.append(wall)
-
 
 
     for y in (0, SCREEN_HEIGHT - SPRITE_SIZE):
@@ -135,7 +165,7 @@ def setup_room_1():
     wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
     wall.left = 7 * SPRITE_SIZE
     wall.bottom = 5 * SPRITE_SIZE
-    room.wall_list.append(wall)
+    room.wall_list.append(wall)"""
 
     # If you want coins or monsters in a level, then add that code here.
 
@@ -148,8 +178,8 @@ def setup_room_1():
 
         while not flower_coin_placed_successfully:
             # Position the coin
-            flower_coin.center_x = random.randrange(0, 600)  # SCREEN_WIDTH
-            flower_coin.center_y = random.randrange(0, 400)  # SCREEN_HEIGHT
+            flower_coin.center_x = random.randrange(0, 800)  # SCREEN_WIDTH
+            flower_coin.center_y = random.randrange(0, 600)  # SCREEN_HEIGHT
 
             wall_hit_list = arcade.check_for_collision_with_list(flower_coin, room.wall_list)
 
@@ -181,7 +211,46 @@ def setup_room_2():
     room.coin_list = arcade.SpriteList()
 
     # -- Set up the walls
-    # Create bottom and top row of boxes
+    # level 2
+    # left wall (top part)
+    for y in range(560, 730, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 0
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # left wall (bottom part)
+    for y in range(34, 230, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 0
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # right wall (top part)
+    for y in range(560, 730, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 900
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # right wall (bottom part)
+    for y in range(34, 230, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 900
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # bottom wall
+    for x in range(0, 900, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 34
+        room.wall_list.append(wall)
+    # top wall
+    for x in range(3, 900, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 738
+        room.wall_list.append(wall)
+
+
+    """"# Create bottom and top row of boxes
     # This y loops a list of two, the coordinate 0, and just under the top of window
     for y in (0, SCREEN_HEIGHT - SPRITE_SIZE):
         # Loop for each box going across
@@ -206,7 +275,7 @@ def setup_room_2():
     wall.left = 5 * SPRITE_SIZE
     wall.bottom = 6 * SPRITE_SIZE
     room.wall_list.append(wall)
-    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
+    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")"""
 
 
     # If you want coins or monsters in a level, then add that code here.
@@ -233,6 +302,88 @@ def setup_room_2():
 
         # Add the coin to the lists
         room.coin_list.append(sun_coin)
+
+    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
+
+    return room
+
+
+def setup_room_3():
+    """
+    Create and return room 2.
+    """
+    room = Room()
+
+    """ Set up the game and initialize the variables. """
+    # Sprite lists
+    room.wall_list = arcade.SpriteList()
+    room.coin_list = arcade.SpriteList()
+
+    # -- Set up the walls
+    # level 3
+    # left wall (top part)
+    for y in range(560, 730, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 0
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # left wall (bottom part)
+    for y in range(34, 230, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 0
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # right wall (top part)
+    for y in range(560, 730, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 900
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # right wall (bottom part)
+    for y in range(34, 230, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 900
+        wall.center_y = y
+        room.wall_list.append(wall)
+    # bottom wall
+    for x in range(0, 900, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 34
+        room.wall_list.append(wall)
+    # top wall
+    for x in range(3, 900, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 738
+        room.wall_list.append(wall)
+
+    # If you want coins or monsters in a level, then add that code here.
+
+    # Scatter the coins
+    # Leaf coins
+    for i in range(10):
+        leaf_coin = arcade.Sprite("leaf_coin.png", SPRITE_SCALING_LEAF_COIN)
+
+        leaf_coin_placed_successfully = False
+
+        while not leaf_coin_placed_successfully:
+            # Position the coin
+            leaf_coin.center_x = random.randrange(0, 1000)  # SCREEN_WIDTH
+            leaf_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+
+            wall_hit_list = arcade.check_for_collision_with_list(leaf_coin, room.wall_list)
+
+            leaf_coin_hit_list = arcade.check_for_collision_with_list(leaf_coin, room.coin_list)
+
+            if len(wall_hit_list) == 0 and len(leaf_coin_hit_list) == 0:
+                # It is!
+                leaf_coin_placed_successfully = True
+
+        # Add the coin to the lists
+        room.coin_list.append(leaf_coin)
+
+    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
 
     return room
 
@@ -268,6 +419,10 @@ class MyGame(arcade.Window):
         self.current_room = 0
         self.rooms = None
 
+        # Used in scrolling
+        self.view_bottom = 0
+        self.view_left = 0
+
     def setup(self):
         """ Set up the game and initialize the variables. """
         # sprite list
@@ -292,11 +447,19 @@ class MyGame(arcade.Window):
         room = setup_room_2()
         self.rooms.append(room)
 
+        room = setup_room_3()
+        self.rooms.append(room)
+
         # Our starting room number
         self.current_room = 0
 
         # Create a physics engine for this room
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.rooms[self.current_room].wall_list)
+
+        # Set the viewport boundaries
+        # These numbers set where we have 'scrolled' to.
+        self.view_left = 0
+        self.view_bottom = 0
 
     def on_draw(self):
         """
@@ -307,10 +470,12 @@ class MyGame(arcade.Window):
         arcade.start_render()
 
         # Draw the background texture
-        arcade.draw_lrwh_rectangle_textured(0, 800,
-                                            800, -1,
+
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            900, 790,
                                             self.rooms[self.current_room].background)
                                             #used to be 0, 0, screen_width, screen_height
+
 
         # Draw all the walls in this room
         self.rooms[self.current_room].wall_list.draw()
@@ -353,28 +518,60 @@ class MyGame(arcade.Window):
         self.physics_engine.update()
         self.player_sprite.update()
 
-        # -----------------------------------------------------------------------------------------------
-        """self.player_sprite.center_x += self.player_sprite.change_x
-        self.player_sprite.center_y += self.player_sprite.change_y
+        # --- Manage Scrolling ---
 
-        if self.player_sprite.change_x < 0:
-            self.texture = self.textures[TEXTURE_LEFT]
-        elif self.player_sprite.change_x > 0:
-            self.texture = self.textures[TEXTURE_RIGHT]"""
-        #------------------------------------------------------------------------------------------------
+        changed = False
+
+        # Scroll left
+        left_boundary = self.view_left + VIEWPORT_MARGIN
+        if self.player_sprite.left < left_boundary:
+            self.view_left -= left_boundary - self.player_sprite.left
+            changed = True
+
+        # Scroll right
+        right_boundary = self.view_left + SCREEN_WIDTH - VIEWPORT_MARGIN
+        if self.player_sprite.right > right_boundary:
+            self.view_left += self.player_sprite.right - right_boundary
+            changed = True
+
+        # Scroll up
+        top_boundary = self.view_bottom + SCREEN_HEIGHT - VIEWPORT_MARGIN
+        if self.player_sprite.top > top_boundary:
+            self.view_bottom += self.player_sprite.top - top_boundary
+            changed = True
+
+        # Scroll down
+        bottom_boundary = self.view_bottom + VIEWPORT_MARGIN
+        if self.player_sprite.bottom < bottom_boundary:
+            self.view_bottom -= bottom_boundary - self.player_sprite.bottom
+            changed = True
+
+        self.view_left = int(self.view_left)
+        self.view_bottom = int(self.view_bottom)
+
+        # If we changed the boundary values, update the view port to match
+        if changed:
+            arcade.set_viewport(self.view_left,
+                                SCREEN_WIDTH + self.view_left,
+                                self.view_bottom,
+                                SCREEN_HEIGHT + self.view_bottom)
 
         # Do some logic here to figure out what room we are in, and if we need to go
         # to a different room.
-        if self.player_sprite.center_x > SCREEN_WIDTH and self.current_room == 0:
-            self.current_room = 1
+        # for room 1
+        if self.player_sprite.center_x > 880 and self.current_room == 0:
+            self.current_room = 1 # Screen width = 800
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
             self.player_sprite.center_x = 0
+        # for room 2
         elif self.player_sprite.center_x < 0 and self.current_room == 1:
             self.current_room = 0
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
-            self.player_sprite.center_x = SCREEN_WIDTH # ------------ or 0?
+            self.player_sprite.center_x = 900 # was 920
+
+        # ---------------------------------------------------- DO THIS FOR ROOM 3
 
         # Coins
         # flower coins
@@ -383,9 +580,8 @@ class MyGame(arcade.Window):
 
         for coin in hit_list:
             coin.remove_from_sprite_lists()
-            self.score += 1
+            # self.score += 1
         # include sounds"""
-
 
 
 def main():
