@@ -14,13 +14,13 @@ import math
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
 SPRITE_SCALING_FLOWER_COIN = 0.2
-SPRITE_SCALING_ICE_CUBE_COIN = 0.2
+SPRITE_SCALING_SNOWBALL_COIN = 0.2
 SPRITE_SCALING_LEAF_COIN = 0.2
 SPRITE_SCALING_SUN_COIN = 0.2
-SPRITE_SCALING_ENEMY_BEE = 0.2
-SPRITE_SCALING_ENEMY_CRAB = 0.2
-SPRITE_SCALING_ENEMY_PUMPKIN = 0.2
-SPRITE_SCALING_ENEMY_SANTA = 0.2
+SPRITE_SCALING_ENEMY_BEE = 0.4
+SPRITE_SCALING_ENEMY_CRAB = 0.5
+SPRITE_SCALING_ENEMY_PUMPKIN = 0.6
+SPRITE_SCALING_ENEMY_SANTA = 0.6
 SPRITE_SCALING_PLAYER = 0.2
 SPRITE_SCALING_PLAYER_BULLET = 0.5
 SPRITE_SCALING_ENEMY_BULLET = 0.5
@@ -43,7 +43,7 @@ FLOWER_COIN_COUNT = 10
 SUN_COIN_COUNT = 10
 LEAF_COIN_COUNT = 10
 ICE_CUBE_COIN_COUNT = 10
-TOTAL_COIN_COUNT = 40
+# TOTAL_COIN_COUNT = 40
 
 
 class InstructionView(arcade.View):
@@ -185,7 +185,7 @@ def setup_room_1():
 
 
     # -- Set up the walls
-    # Level 1
+    # BORDERS
     # left wall
     for y in range(34, 700, 64):
         wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
@@ -217,6 +217,13 @@ def setup_room_1():
         wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 738
+        room.wall_list.append(wall)
+
+    #INSIDE WALLS
+    for x in range(200, 500, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 300
         room.wall_list.append(wall)
 
     # If you want coins or monsters in a level, then add that code here.
@@ -253,7 +260,7 @@ def setup_room_1():
 
 
     # Load the background image for this level.
-    room.background = arcade.load_texture("sky_5.png")
+    room.background = arcade.load_texture("backgroundextended.png")
 
     return room
 
@@ -342,7 +349,7 @@ def setup_room_2():
         # Add the coin to the lists
         room.coin_list.append(sun_coin)
 
-    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
+    room.background = arcade.load_texture("backgroundextended.png")
 
     return room
 
@@ -430,7 +437,7 @@ def setup_room_3():
         # Add the coin to the lists
         room.coin_list.append(leaf_coin)
 
-    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
+    room.background = arcade.load_texture("fallbackground.png")
 
     return room
 
@@ -495,29 +502,28 @@ def setup_room_4():
     room.enemy_list.append(santa_enemy)
 
     # Scatter the coins
-    # Leaf coins
     for i in range(10):
-        ice_cube_coin = arcade.Sprite("ice_cube_coin.png", SPRITE_SCALING_ICE_CUBE_COIN)
+        snowball_coin = arcade.Sprite("snowball_coin.png", SPRITE_SCALING_SNOWBALL_COIN)
 
-        ice_cube_coin_placed_successfully = False
+        snowball_coin_placed_successfully = False
 
-        while not ice_cube_coin_placed_successfully:
+        while not snowball_coin_placed_successfully:
             # Position the coin
-            ice_cube_coin.center_x = random.randrange(0, 800)  # SCREEN_WIDTH
-            ice_cube_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+            snowball_coin.center_x = random.randrange(0, 800)  # SCREEN_WIDTH
+            snowball_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
 
-            wall_hit_list = arcade.check_for_collision_with_list(ice_cube_coin, room.wall_list)
+            wall_hit_list = arcade.check_for_collision_with_list(snowball_coin, room.wall_list)
 
-            ice_cube_coin_hit_list = arcade.check_for_collision_with_list(ice_cube_coin, room.coin_list)
+            snowball_coin_hit_list = arcade.check_for_collision_with_list(snowball_coin, room.coin_list)
 
-            if len(wall_hit_list) == 0 and len(ice_cube_coin_hit_list) == 0:
+            if len(wall_hit_list) == 0 and len(snowball_coin_hit_list) == 0:
                 # It is!
-                ice_cube_coin_placed_successfully = True
+                snowball_coin_placed_successfully = True
 
         # Add the coin to the lists
-        room.coin_list.append(ice_cube_coin)
+        room.coin_list.append(snowball_coin)
 
-    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
+    room.background = arcade.load_texture("snowbackground.png")
 
     return room
 
@@ -554,6 +560,9 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
 
         # Lives
         self.hearts = 3
+
+        # Total coin count
+        self.total_coin_count = 0
 
         # Set up the player
         self.player_sprite = None
@@ -592,6 +601,9 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
 
         # Lives
         self.hearts = 3
+
+        # total coin count
+        self.total_coin_count = 0
 
         # Our list of rooms
         self.rooms = []
@@ -723,8 +735,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
 
         # GAME OVER STUFF
         # Maybe do this to pause the game once it is over
-        if len(self.coin_list) < 40 or self.hearts > 0:
-            self.enemy_list.update()
+        if self.total_coin_count < 40 or self.hearts > 0:
             self.rooms[self.current_room].enemy_bullet_list.update()
 
         # lose
@@ -733,7 +744,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             self.window.show_view(view)
             
         # win
-        if len(self.coin_list) == 40:
+        if self.total_coin_count == 40:
             view = WinView
             self.window.show(view)
 
@@ -828,6 +839,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         for coin in hit_list:
             coin.remove_from_sprite_lists()
             self.score += 1
+            self.total_coin_count += 1
             arcade.play_sound(self.coin_sound)
         # include sounds"""
 
