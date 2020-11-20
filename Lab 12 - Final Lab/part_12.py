@@ -9,6 +9,7 @@ python -m arcade.examples.sprite_rooms"""
 import arcade
 import random
 import os
+import math
 
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
@@ -16,7 +17,13 @@ SPRITE_SCALING_FLOWER_COIN = 0.2
 SPRITE_SCALING_ICE_CUBE_COIN = 0.2
 SPRITE_SCALING_LEAF_COIN = 0.2
 SPRITE_SCALING_SUN_COIN = 0.2
+SPRITE_SCALING_ENEMY_BEE = 0.2
+SPRITE_SCALING_ENEMY_CRAB = 0.2
+SPRITE_SCALING_ENEMY_PUMPKIN = 0.2
+SPRITE_SCALING_ENEMY_SANTA = 0.2
 SPRITE_SCALING_PLAYER = 0.2
+SPRITE_SCALING_PLAYER_BULLET = 0.5
+SPRITE_SCALING_ENEMY_BULLET = 0.5
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 SCREEN_WIDTH = 800
@@ -27,6 +34,8 @@ MOVEMENT_SPEED = 5
 TEXTURE_LEFT = 0
 TEXTURE_RIGHT = 1
 
+BULLET_SPEED = 5
+
 VIEWPORT_MARGIN = 60
 
 # Coin Count
@@ -34,6 +43,81 @@ FLOWER_COIN_COUNT = 10
 SUN_COIN_COUNT = 10
 LEAF_COIN_COUNT = 10
 ICE_CUBE_COIN_COUNT = 10
+TOTAL_COIN_COUNT = 40
+
+
+class InstructionView(arcade.View):
+    def on_show(self):
+        """ This is run once when we switch to this view """
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        arcade.draw_text("Instructions Screen", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                         arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75,
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        """ If the user presses the mouse button, start the game. """
+        game_view = GameView()
+        game_view.setup()
+        self.window.show_view(game_view)
+
+
+class LoseView(arcade.View):
+    """ View to show when game is over """
+
+    def __init__(self):
+        """ This is run once when we switch to this view """
+        super().__init__()
+        self.texture = arcade.load_texture("lose_screen.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """ If the user presses the mouse button, re-start the game. """
+        game_view = GameView()
+        game_view.setup()
+        self.window.show_view(game_view)
+
+
+class WinView(arcade.View):
+    """ View to show when game is over """
+
+    def __init__(self):
+        """ This is run once when we switch to this view """
+        super().__init__()
+        self.texture = arcade.load_texture("win_screen.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """ If the user presses the mouse button, re-start the game. """
+        game_view = GameView()
+        game_view.setup()
+        self.window.show_view(game_view)
 
 
 class Player(arcade.Sprite):
@@ -75,7 +159,10 @@ class Room:
     def __init__(self):
         # You may want many lists. Lists for coins, monsters, etc.
         self.wall_list = None
+        self.enemy_list = None
         self.coin_list = None
+        self.player_bullet_list = None
+        self.enemy_bullet_list = arcade.SpriteList()
 
 
         # This holds the background images. If you don't want changing
@@ -94,6 +181,7 @@ def setup_room_1():
     # Sprite lists
     room.wall_list = arcade.SpriteList()
     room.coin_list = arcade.SpriteList()
+    room.enemy_list = arcade.SpriteList()
 
 
     # -- Set up the walls
@@ -132,6 +220,13 @@ def setup_room_1():
         room.wall_list.append(wall)
 
     # If you want coins or monsters in a level, then add that code here.
+    # bee enemy
+    bee_enemy = arcade.Sprite("enemy_bee.png", SPRITE_SCALING_ENEMY_BEE)
+    bee_enemy.center_x = 400
+    bee_enemy.center_y = 300
+    bee_enemy.angle = 180
+    room.enemy_list.append(bee_enemy)
+
 
     # Scatter the coins
     # Flower coins
@@ -158,7 +253,7 @@ def setup_room_1():
 
 
     # Load the background image for this level.
-    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
+    room.background = arcade.load_texture("sky_5.png")
 
     return room
 
@@ -173,6 +268,7 @@ def setup_room_2():
     # Sprite lists
     room.wall_list = arcade.SpriteList()
     room.coin_list = arcade.SpriteList()
+    room.enemy_list = arcade.SpriteList()
 
     # -- Set up the walls
     # level 2
@@ -215,6 +311,14 @@ def setup_room_2():
 
     # If you want coins or monsters in a level, then add that code here.
 
+    # crab enemy
+    crab_enemy = arcade.Sprite("enemy_crab.png", SPRITE_SCALING_ENEMY_CRAB)
+    crab_enemy.center_x = 400
+    crab_enemy.center_y = 300
+    crab_enemy.angle = 180
+    room.enemy_list.append(crab_enemy)
+
+
     # Scatter the coins
     # Sun coins
     for i in range(10):
@@ -253,6 +357,7 @@ def setup_room_3():
     # Sprite lists
     room.wall_list = arcade.SpriteList()
     room.coin_list = arcade.SpriteList()
+    room.enemy_list = arcade.SpriteList()
 
     # -- Set up the walls
     # level 3
@@ -294,6 +399,13 @@ def setup_room_3():
         room.wall_list.append(wall)
 
     # If you want coins or monsters in a level, then add that code here.
+    # crab enemy
+    pumpkin_enemy = arcade.Sprite("enemy_pumpkin.png", SPRITE_SCALING_ENEMY_PUMPKIN)
+    pumpkin_enemy.center_x = 400
+    pumpkin_enemy.center_y = 300
+    pumpkin_enemy.angle = 180
+    room.enemy_list.append(pumpkin_enemy)
+
 
     # Scatter the coins
     # Leaf coins
@@ -322,6 +434,7 @@ def setup_room_3():
 
     return room
 
+
 def setup_room_4():
     """
     Create and return room 2.
@@ -332,6 +445,7 @@ def setup_room_4():
     # Sprite lists
     room.wall_list = arcade.SpriteList()
     room.coin_list = arcade.SpriteList()
+    room.enemy_list = arcade.SpriteList()
 
     # -- Set up the walls
     # level 3
@@ -373,17 +487,23 @@ def setup_room_4():
         room.wall_list.append(wall)
 
     # If you want coins or monsters in a level, then add that code here.
+    # crab enemy
+    santa_enemy = arcade.Sprite("santa_enemy.png", SPRITE_SCALING_ENEMY_SANTA)
+    santa_enemy.center_x = 400
+    santa_enemy.center_y = 300
+    santa_enemy.angle = 180
+    room.enemy_list.append(santa_enemy)
 
     # Scatter the coins
     # Leaf coins
     for i in range(10):
-        ice_cube_coin = arcade.Sprite("icecube_coin.png", SPRITE_SCALING_ICE_CUBE_COIN)
+        ice_cube_coin = arcade.Sprite("ice_cube_coin.png", SPRITE_SCALING_ICE_CUBE_COIN)
 
-        ice_coin_placed_successfully = False
+        ice_cube_coin_placed_successfully = False
 
-        while not ice_coin_placed_successfully:
+        while not ice_cube_coin_placed_successfully:
             # Position the coin
-            ice_cube_coin.center_x = random.randrange(0, 1000)  # SCREEN_WIDTH
+            ice_cube_coin.center_x = random.randrange(0, 800)  # SCREEN_WIDTH
             ice_cube_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
 
             wall_hit_list = arcade.check_for_collision_with_list(ice_cube_coin, room.wall_list)
@@ -402,14 +522,16 @@ def setup_room_4():
     return room
 
 
-class MyGame(arcade.Window):
+class GameView(arcade.View): # was MyGame(arcade.Window)
     """ Main application class. """
 
-    def __init__(self, width, height, title):
+    def __init__(self):
+        # was (self, width, height, title)
         """
         Initializer
         """
-        super().__init__(width, height, title)
+        super().__init__()
+        # was super().__init__(width, height, title)
 
         # Set the working directory (where we expect to find files) to the same
         # directory this .py file is in. You can leave this out of your own
@@ -421,13 +543,28 @@ class MyGame(arcade.Window):
         # Sprite lists
         self.player_list = None
         self.coin_list = None
+        self.enemy_list = None
+        self.player_bullet_list = None
+        self.enemy_bullet_list = None               # maybe add bullet list instead of two different bullet lists
+
+        self.frame_count = 0
 
         # Score
         self.score = 0
 
+        # Lives
+        self.hearts = 3
+
         # Set up the player
         self.player_sprite = None
         self.physics_engine = None
+
+        # Coin sound from OpenGameArt
+        self.coin_sound = arcade.load_sound("coin_sound.ogg")
+        # Enemy shoot sound from OpenGameArt
+        self.enemy_shoot_sound = arcade.load_sound("enemy_shoot.ogg")
+        # Player shoot sound from OpenGameArt
+        self.player_shoot_sound = arcade.load_sound("player_shoot.wav")
 
         # Rooms
         self.current_room = 0
@@ -441,6 +578,8 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
         # sprite list
         self.player_list = arcade.SpriteList()
+        self.player_bullet_list = arcade.SpriteList()
+        self.enemy_bullet_list = arcade.SpriteList()
 
         # Set up the player
         self.player_sprite = Player()
@@ -450,6 +589,9 @@ class MyGame(arcade.Window):
 
         # Score
         self.score = 0
+
+        # Lives
+        self.hearts = 3
 
         # Our list of rooms
         self.rooms = []
@@ -501,11 +643,58 @@ class MyGame(arcade.Window):
         # above for each list.
 
         self.player_list.draw()
+        self.player_bullet_list.draw()
+        self.rooms[self.current_room].enemy_bullet_list.draw()
         self.rooms[self.current_room].coin_list.draw()
+        self.rooms[self.current_room].enemy_list.draw()
 
-        # Score
-        """output = f"Score: {self.score}"
-        arcade.draw_text(output, 10 + self.view_left, 20 + self.view_bottom, arcade.color.BLACK, 14)"""
+        # Display score
+        output = f"Score: {self.score}"
+        arcade.draw_text(output, 10 + self.view_left, 20 + self.view_bottom, arcade.color.WHITE, 14)
+
+        # Display hearts
+        output = f"Hearts: {self.hearts}"
+        arcade.draw_text(output, 10 + self.view_left, 50 + self.view_bottom, arcade.color.WHITE, 14)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        # Called whenever the mouse button is clicked.
+        # self.window.set_mouse_visible(False)
+        # Bullet code
+        # the bullet image
+        player_bullet = arcade.Sprite("player_bullet.png", SPRITE_SCALING_PLAYER_BULLET)
+
+        """MAKE IT SO YOU CAN'T HIT THE COINS""" # --------------------------------------------------------- IMPORTANT
+        # Position the bullet at the player's current location
+        start_x = self.player_sprite.center_x
+        start_y = self.player_sprite.center_y
+        player_bullet.center_x = start_x
+        player_bullet.center_y = start_y
+
+        # Get from the mouse the destination location for the bullet
+        # IMPORTANT! If you have a scrolling screen, you will also need #--------------------------------------------
+        # to add in self.view_bottom and self.view_left.
+        dest_x = x # self.view_left
+        dest_y = y # self.view_bottom
+
+        # Do math to calculate how to get the bullet to the destination.
+        # Calculation the angle in radians between the start points
+        # and end points. This is the angle the bullet will travel.
+        x_diff = dest_x - start_x
+        y_diff = dest_y - start_y
+        angle = math.atan2(y_diff, x_diff)
+
+        # Angle the bullet sprite so it doesn't look like it is flying
+        # sideways.
+        player_bullet.angle = math.degrees(angle)
+        print(f"Bullet angle: {player_bullet.angle:.2f}")
+
+        # Taking into account the angle, calculate our change_x
+        # and change_y. Velocity is how fast the bullet travels.
+        player_bullet.change_x = math.cos(angle) * BULLET_SPEED
+        player_bullet.change_y = math.sin(angle) * BULLET_SPEED
+
+        # Add the bullet to the appropriate lists
+        self.player_bullet_list.append(player_bullet)
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -529,11 +718,30 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
+        self.physics_engine.update()
+        self.player_sprite.update()
+
+        # GAME OVER STUFF
+        # Maybe do this to pause the game once it is over
+        if len(self.coin_list) < 40 or self.hearts > 0:
+            self.enemy_list.update()
+            self.rooms[self.current_room].enemy_bullet_list.update()
+
+        # lose
+        if self.hearts == 0:
+            view = LoseView()
+            self.window.show_view(view)
+            
+        # win
+        if len(self.coin_list) == 40:
+            view = WinView
+            self.window.show(view)
 
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
-        self.physics_engine.update()
-        self.player_sprite.update()
+        # self.physics_engine.update()
+        # self.player_sprite.update()
+
 
         # --- Manage Scrolling ---
 
@@ -619,14 +827,103 @@ class MyGame(arcade.Window):
 
         for coin in hit_list:
             coin.remove_from_sprite_lists()
-            # self.score += 1
+            self.score += 1
+            arcade.play_sound(self.coin_sound)
         # include sounds"""
+
+        # Bullet ------------ may have to move this code to each room
+        # Call update on all sprites
+        self.player_bullet_list.update()
+
+        # Loop through each bullet
+        for player_bullet in self.player_bullet_list:
+
+            """# Check this bullet to see if it hit a coin
+            hit_list = arcade.check_for_collision_with_list(player_bullet,
+                                                            self.rooms[self.current_room].coin_list)
+
+            # If it did, get rid of the bullet
+            if len(hit_list) > 0:
+                player_bullet.remove_from_sprite_lists()"""
+            # Play player shooting sound
+            # arcade.play_sound(self.player_shoot_sound) ---------------------------------- LOOK AT THIS------
+            # If the bullet flies off-screen, remove it.
+            if player_bullet.bottom > 1200 or player_bullet.top < 0 or player_bullet.right < 0 or player_bullet.left > 1200:
+                # was if player_bullet.bottom > self.width or player_bullet.top < 0 or player_bullet.right < 0 or player_bullet.left > self.width:
+                player_bullet.remove_from_sprite_lists()
+
+        # For enemy bullets
+
+        self.frame_count += 1
+
+        # Loop through each enemy that we have
+        for enemy in self.rooms[self.current_room].enemy_list:
+
+            # First, calculate the angle to the player. We could do this
+            # only when the bullet fires, but in this case we will rotate
+            # the enemy to face the player each frame, so we'll do this
+            # each frame.
+
+            # Position the start at the enemy's current location
+            start_x = enemy.center_x
+            start_y = enemy.center_y
+
+            # Get the destination location for the bullet
+            dest_x = self.player_sprite.center_x
+            dest_y = self.player_sprite.center_y
+
+            # Do math to calculate how to get the bullet to the destination.
+            # Calculation the angle in radians between the start points
+            # and end points. This is the angle the bullet will travel.
+            x_diff = dest_x - start_x
+            y_diff = dest_y - start_y
+            angle = math.atan2(y_diff, x_diff)
+
+            # Set the enemy to face the player.
+            # enemy.angle = math.degrees(angle) - 90
+
+            # Shoot every 60 frames change of shooting each frame
+            if self.frame_count % 120 == 0:
+                enemy_bullet = arcade.Sprite(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_ENEMY_BULLET)
+                print("bang")
+                # shooting sound
+                arcade.play_sound(self.enemy_shoot_sound)
+                enemy_bullet.center_x = start_x
+                enemy_bullet.center_y = start_y
+
+                # Angle the bullet sprite
+                enemy_bullet.angle = math.degrees(angle)
+
+                # Taking into account the angle, calculate our change_x
+                # and change_y. Velocity is how fast the bullet travels.
+                enemy_bullet.change_x = math.cos(angle) * BULLET_SPEED
+                enemy_bullet.change_y = math.sin(angle) * BULLET_SPEED
+
+                self.rooms[self.current_room].enemy_bullet_list.append(enemy_bullet)
+
+        # Get rid of the bullet when it flies off-screen
+        for enemy_bullet in self.rooms[self.current_room].enemy_bullet_list:
+            if enemy_bullet.top < 0:
+                enemy_bullet.remove_from_sprite_lists()
+
+        # Check to see if an enemy bullet has hit the player
+        # if it has, remove a heart
+        hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                        self.rooms[self.current_room].enemy_bullet_list)
+        for enemy_bullet in hit_list:
+            enemy_bullet.remove_from_sprite_lists()
+            self.hearts -= 1
+
+        """self.rooms[self.current_room].enemy_bullet_list.update()"""
+
 
 
 def main():
     """ Main method """
-    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    window.setup()
+    # window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    start_view = InstructionView()
+    window.show_view(start_view)
     arcade.run()
 
 
