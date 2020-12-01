@@ -24,6 +24,7 @@ SPRITE_SCALING_ENEMY_SANTA = 0.6
 SPRITE_SCALING_PLAYER = 0.2
 SPRITE_SCALING_PLAYER_BULLET = 0.5
 SPRITE_SCALING_ENEMY_BULLET = 0.5
+SPRITE_SCALING_HEALTH_STAR = 0.2
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 SCREEN_WIDTH = 800
@@ -43,6 +44,7 @@ FLOWER_COIN_COUNT = 10
 SUN_COIN_COUNT = 10
 LEAF_COIN_COUNT = 10
 ICE_CUBE_COIN_COUNT = 10
+# HEALTH_STAR_COUNT = 1
 # TOTAL_COIN_COUNT = 40
 
 
@@ -81,6 +83,15 @@ class LoseView(arcade.View):
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+        """DO WE NEED THIS LINE? -------------------------------------------------------"""
+
+        # Maybe use this line of code instead of the one above?
+        """self.view_left = 0
+        self.view_bottom = 0
+        arcade.set_viewport(self.view_left,
+                            SCREEN_WIDTH + self.view_left,
+                            self.view_bottom,
+                            SCREEN_HEIGHT + self.view_bottom)"""
 
     def on_draw(self):
         """ Draw this view """
@@ -161,6 +172,9 @@ class Room:
         self.wall_list = None
         self.enemy_list = None
         self.coin_list = None
+        self.health_power_up_list = arcade.SpriteList()                  # ---------------------------------------------------------
+        """self.health_power_up_list = None or self.health_power_up_list = arcade.SpriteList()
+        or self.rooms[self.current_room].health_power_up_list"""
         self.player_bullet_list = None
         self.enemy_bullet_list = arcade.SpriteList()
 
@@ -244,8 +258,8 @@ def setup_room_1():
 
         while not flower_coin_placed_successfully:
             # Position the coin
-            flower_coin.center_x = random.randrange(0, 800)  # SCREEN_WIDTH
-            flower_coin.center_y = random.randrange(0, 600)  # SCREEN_HEIGHT
+            flower_coin.center_x = random.randrange(0, 850)  # SCREEN_WIDTH
+            flower_coin.center_y = random.randrange(0, 700)  # SCREEN_HEIGHT
 
             wall_hit_list = arcade.check_for_collision_with_list(flower_coin, room.wall_list)
 
@@ -276,6 +290,7 @@ def setup_room_2():
     room.wall_list = arcade.SpriteList()
     room.coin_list = arcade.SpriteList()
     room.enemy_list = arcade.SpriteList()
+    room.health_power_up_list = arcade.SpriteList()
 
     # -- Set up the walls
     # level 2
@@ -325,6 +340,11 @@ def setup_room_2():
     crab_enemy.angle = 180
     room.enemy_list.append(crab_enemy)
 
+    health_star = arcade.Sprite("health_star.png", SPRITE_SCALING_HEALTH_STAR)
+    health_star.center_x = 380
+    health_star.center_y = 400
+    health_star.angle = 180
+    room.health_power_up_list.append(health_star)
 
     # Scatter the coins
     # Sun coins
@@ -335,8 +355,8 @@ def setup_room_2():
 
         while not sun_coin_placed_successfully:
             # Position the coin
-            sun_coin.center_x = random.randrange(0, 1000)  # SCREEN_WIDTH
-            sun_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+            sun_coin.center_x = random.randrange(0, 850)  # SCREEN_WIDTH
+            sun_coin.center_y = random.randrange(0, 700)  # SCREEN_HEIGHT
 
             wall_hit_list = arcade.check_for_collision_with_list(sun_coin, room.wall_list)
 
@@ -365,6 +385,7 @@ def setup_room_3():
     room.wall_list = arcade.SpriteList()
     room.coin_list = arcade.SpriteList()
     room.enemy_list = arcade.SpriteList()
+    room.health_power_up_list = arcade.SpriteList()
 
     # -- Set up the walls
     # level 3
@@ -413,6 +434,12 @@ def setup_room_3():
     pumpkin_enemy.angle = 180
     room.enemy_list.append(pumpkin_enemy)
 
+    health_star = arcade.Sprite("health_star.png", SPRITE_SCALING_HEALTH_STAR)
+    health_star.center_x = 380
+    health_star.center_y = 400
+    health_star.angle = 180
+    room.health_power_up_list.append(health_star)
+
 
     # Scatter the coins
     # Leaf coins
@@ -423,8 +450,8 @@ def setup_room_3():
 
         while not leaf_coin_placed_successfully:
             # Position the coin
-            leaf_coin.center_x = random.randrange(0, 1000)  # SCREEN_WIDTH
-            leaf_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+            leaf_coin.center_x = random.randrange(0, 850)  # SCREEN_WIDTH
+            leaf_coin.center_y = random.randrange(0, 700)  # SCREEN_HEIGHT
 
             wall_hit_list = arcade.check_for_collision_with_list(leaf_coin, room.wall_list)
 
@@ -509,8 +536,8 @@ def setup_room_4():
 
         while not snowball_coin_placed_successfully:
             # Position the coin
-            snowball_coin.center_x = random.randrange(0, 800)  # SCREEN_WIDTH
-            snowball_coin.center_y = random.randrange(0, 800)  # SCREEN_HEIGHT
+            snowball_coin.center_x = random.randrange(0, 850)  # SCREEN_WIDTH
+            snowball_coin.center_y = random.randrange(0, 700)  # SCREEN_HEIGHT
 
             wall_hit_list = arcade.check_for_collision_with_list(snowball_coin, room.wall_list)
 
@@ -550,10 +577,15 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         self.player_list = None
         self.coin_list = None
         self.enemy_list = None
+        self.health_power_up_list = None
         self.player_bullet_list = None
         self.enemy_bullet_list = None               # maybe add bullet list instead of two different bullet lists
 
         self.frame_count = 0
+
+        # Total coin count
+        self.total_coin_count = 0
+
 
         # Score
         self.score = 0
@@ -561,8 +593,6 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         # Lives
         self.hearts = 3
 
-        # Total coin count
-        self.total_coin_count = 0
 
         # Set up the player
         self.player_sprite = None
@@ -589,6 +619,8 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         self.player_list = arcade.SpriteList()
         self.player_bullet_list = arcade.SpriteList()
         self.enemy_bullet_list = arcade.SpriteList()
+        self.health_power_up_list = arcade.SpriteList()#------------------------------------ ???????????????????
+        """ DO I NEED THIS HERE? ----------------------------------------------------------------------------"""
 
         # Set up the player
         self.player_sprite = Player()
@@ -604,6 +636,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
 
         # total coin count
         self.total_coin_count = 0
+
 
         # Our list of rooms
         self.rooms = []
@@ -646,7 +679,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
                                             900, 790,
                                             self.rooms[self.current_room].background)
                                             #used to be 0, 0, screen_width, screen_height
-
+                                            # 0, 0, 900, 790
 
         # Draw all the walls in this room
         self.rooms[self.current_room].wall_list.draw()
@@ -656,6 +689,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
 
         self.player_list.draw()
         self.player_bullet_list.draw()
+        self.rooms[self.current_room].health_power_up_list.draw()
         self.rooms[self.current_room].enemy_bullet_list.draw()
         self.rooms[self.current_room].coin_list.draw()
         self.rooms[self.current_room].enemy_list.draw()
@@ -742,11 +776,18 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         if self.hearts == 0:
             view = LoseView()
             self.window.show_view(view)
+            self.view_left = 0
+            self.view_bottom = 0
+            arcade.set_viewport(self.view_left,
+                                SCREEN_WIDTH + self.view_left,
+                                self.view_bottom,
+                                SCREEN_HEIGHT + self.view_bottom)
             
         # win
         if self.total_coin_count == 40:
-            view = WinView
+            view = WinView()
             self.window.show(view)
+
 
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
@@ -797,6 +838,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         # every time you add a room, you need to add two statements to be able to enter the next room and be able
         # to go back to the previous room, if you only had one elif statement, then you could enter the net room
         # but not able to go back to the previous room
+        print(self.player_sprite.center_x)
         if self.player_sprite.center_x > 880 and self.current_room == 0:
             self.current_room = 1 # Screen width = 800
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
@@ -842,6 +884,11 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             self.total_coin_count += 1
             arcade.play_sound(self.coin_sound)
         # include sounds"""
+
+
+
+
+        # HEALTH ----------------------------
 
         # Bullet ------------ may have to move this code to each room
         # Call update on all sprites
@@ -920,14 +967,20 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
 
         # Check to see if an enemy bullet has hit the player
         # if it has, remove a heart
-        hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+        enemy_bullet_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
                                                         self.rooms[self.current_room].enemy_bullet_list)
-        for enemy_bullet in hit_list:
+        for enemy_bullet in enemy_bullet_hit_list:
             enemy_bullet.remove_from_sprite_lists()
             self.hearts -= 1
 
-        """self.rooms[self.current_room].enemy_bullet_list.update()"""
+        health_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                        self.rooms[self.current_room].health_power_up_list)
+        for health_star in health_hit_list:
+            health_star.remove_from_sprite_lists()
+            self.hearts += 1
 
+        """self.rooms[self.current_room].health_power_up_list.update()"""
+        """DO I NEED THIS LINE ABOVE?????????????????_---------------------------------------------------"""
 
 
 def main():
