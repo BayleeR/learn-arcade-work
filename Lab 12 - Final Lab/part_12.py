@@ -82,16 +82,16 @@ class LoseView(arcade.View):
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
-        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+        """arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)"""
         """DO WE NEED THIS LINE? -------------------------------------------------------"""
 
         # Maybe use this line of code instead of the one above?
-        """self.view_left = 0
+        self.view_left = 0
         self.view_bottom = 0
         arcade.set_viewport(self.view_left,
                             SCREEN_WIDTH + self.view_left,
                             self.view_bottom,
-                            SCREEN_HEIGHT + self.view_bottom)"""
+                            SCREEN_HEIGHT + self.view_bottom)
 
     def on_draw(self):
         """ Draw this view """
@@ -849,7 +849,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
         # -----------------------
-            self.player_sprite.center_x = 900 # was 920
+            self.player_sprite.center_x = 875 # was 920
         elif self.player_sprite.center_x > 880 and self.current_room == 1:
             self.current_room = 2  # Screen width = 800
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
