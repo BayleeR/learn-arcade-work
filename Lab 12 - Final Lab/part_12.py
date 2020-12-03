@@ -31,7 +31,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 640
 SCREEN_TITLE = "Sprite Rooms Example"
 
-MOVEMENT_SPEED = 5
+MOVEMENT_SPEED = 20
 TEXTURE_LEFT = 0
 TEXTURE_RIGHT = 1
 
@@ -468,53 +468,89 @@ def setup_room_2():
 
     """Inner walls"""
 
-    for y in range(170, 300, 64):
+    for y in range(600, 700, 64):
         wall = arcade.Sprite("grass.png", SPRITE_SCALING)
-        wall.center_x = 170
+        wall.center_x = 130
         wall.center_y = y
         room.wall_list.append(wall)
 
-    for y in range(400, 500, 64):
+    for y in range(200, 500, 64):
         wall = arcade.Sprite("grass.png", SPRITE_SCALING)
-        wall.center_x = 300
+        wall.center_x = 130
         wall.center_y = y
         room.wall_list.append(wall)
 
-    for y in range(500, 570, 64):
-        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
-        wall.center_x = 105
-        wall.center_y = y
-        room.wall_list.append(wall)
-
-    for x in range(3, 900, 64):
-        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+    for x in range(290, 420, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
-        wall.center_y = 738
+        wall.center_y = 170
         room.wall_list.append(wall)
 
-    for x in range(300, 450, 64):
-        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+    for x in range(200, 300, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
-        wall.center_y = 200
+        wall.center_y = 300
         room.wall_list.append(wall)
 
     for x in range(550, 700, 64):
-        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
-        wall.center_y = 400
+        wall.center_y = 300
         room.wall_list.append(wall)
 
-    for x in range(600, 700, 64):
+    for y in range(300, 400, 64):
         wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 400
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for y in range(170, 270, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 560
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(515, 680, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
-        wall.center_y = 100
+        wall.center_y = 500
+        room.wall_list.append(wall)
+
+    for y in range(300, 380, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 745
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    coordinate_list = [[270, 540],
+                       [340, 540],
+                       [270, 610],
+                       [340, 610]]
+    # Loop through coordinates
+    for coordinate in coordinate_list:
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = coordinate[0]
+        wall.center_y = coordinate[1]
         room.wall_list.append(wall)
 
     for x in range(500, 600, 64):
-        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
         wall.center_x = x
-        wall.center_y = 600
+        wall.center_y = 700
         room.wall_list.append(wall)
+
+    for x in range(700, 800, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 170
+        room.wall_list.append(wall)
+
+    for y in range(600, 660, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 750
+        wall.center_y = y
+        room.wall_list.append(wall)
+
 
     # Scatter the coins
     # Sun coins
@@ -1023,8 +1059,9 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             self.current_room = 0
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
-        # -----------------------
-            self.player_sprite.center_x = 875 # was 920
+
+            self.player_sprite.center_x = 875 # was 875
+        # -------------------------------------
         elif self.player_sprite.center_x > 880 and self.current_room == 1:
             self.current_room = 2  # Screen width = 800
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
@@ -1034,7 +1071,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             self.current_room = 1
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
-            self.player_sprite.center_x = 900 # was 920
+            self.player_sprite.center_x = 875 # was 900
         # ------------------
         elif self.player_sprite.center_x > 880 and self.current_room == 2:
             self.current_room = 3  # Screen width = 800
@@ -1045,7 +1082,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             self.current_room = 2
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                              self.rooms[self.current_room].wall_list)
-            self.player_sprite.center_x = 900  # was 920
+            self.player_sprite.center_x = 875  # was 900
 
 
 
