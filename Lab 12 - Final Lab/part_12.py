@@ -49,21 +49,43 @@ ICE_CUBE_COIN_COUNT = 10
 
 
 class InstructionView(arcade.View):
-    def on_show(self):
+    """ View to show when game is over """
+
+    def __init__(self):
         """ This is run once when we switch to this view """
+        super().__init__()
+        self.texture = arcade.load_texture("instruction-screen.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        """arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)"""
+        """DO WE NEED THIS LINE? -------------------------------------------------------"""
+
+        # Maybe use this line of code instead of the one above?
+        self.view_left = 0
+        self.view_bottom = 0
+        arcade.set_viewport(self.view_left,
+                            SCREEN_WIDTH + self.view_left,
+                            self.view_bottom,
+                            SCREEN_HEIGHT + self.view_bottom)
+
+    """def on_show(self):
+        This is run once when we switch to this view
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
-        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)"""
 
     def on_draw(self):
         """ Draw this view """
         arcade.start_render()
-        arcade.draw_text("Instructions Screen", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
+        """arcade.draw_text("Instructions Screen", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
                          arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75,
-                         arcade.color.WHITE, font_size=20, anchor_x="center")
+                         arcade.color.WHITE, font_size=20, anchor_x="center")"""
 
     def on_mouse_press(self, x, y, button, modifiers):
         """ If the user presses the mouse button, start the game. """
@@ -78,7 +100,7 @@ class LoseView(arcade.View):
     def __init__(self):
         """ This is run once when we switch to this view """
         super().__init__()
-        self.texture = arcade.load_texture("lose_screen.png")
+        self.texture = arcade.load_texture("lose-screen.png")
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
@@ -112,11 +134,18 @@ class WinView(arcade.View):
     def __init__(self):
         """ This is run once when we switch to this view """
         super().__init__()
-        self.texture = arcade.load_texture("win_screen.png")
+        self.texture = arcade.load_texture("win-screen.png")
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
-        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+        """arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)"""
+
+        self.view_left = 0
+        self.view_bottom = 0
+        arcade.set_viewport(self.view_left,
+                            SCREEN_WIDTH + self.view_left,
+                            self.view_bottom,
+                            SCREEN_HEIGHT + self.view_bottom)
 
     def on_draw(self):
         """ Draw this view """
@@ -782,11 +811,14 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
+            return     
+
             
         # win
         if self.total_coin_count == 40:
             view = WinView()
-            self.window.show(view)
+            self.window.show_view(view)
+            # was self.window.show(view)
 
 
         # Call update on all sprites (The sprites don't do much in this
@@ -897,12 +929,16 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         # Loop through each bullet
         for player_bullet in self.player_bullet_list:
 
-            """# Check this bullet to see if it hit a coin
-            hit_list = arcade.check_for_collision_with_list(player_bullet,
-                                                            self.rooms[self.current_room].coin_list)
+            # Check this bullet to see if it hit an enemy
+            enemy_hit_list = arcade.check_for_collision_with_list(player_bullet,
+                                                            self.rooms[self.current_room].enemy_list)
+
+            for enemy in enemy_hit_list:
+                enemy.remove_from_sprite_lists()
+
 
             # If it did, get rid of the bullet
-            if len(hit_list) > 0:
+            """if len(hit_list) > 0:
                 player_bullet.remove_from_sprite_lists()"""
             # Play player shooting sound
             # arcade.play_sound(self.player_shoot_sound) ---------------------------------- LOOK AT THIS------
@@ -941,6 +977,15 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             # Set the enemy to face the player.
             # enemy.angle = math.degrees(angle) - 90
 
+            # Check to see if an enemy bullet has hit the player
+            # if it has, remove a heart
+            enemy_bullet_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                                         self.rooms[
+                                                                             self.current_room].enemy_bullet_list)
+            for enemy_bullet in enemy_bullet_hit_list:
+                enemy_bullet.remove_from_sprite_lists()
+                self.hearts -= 1
+
             # Shoot every 60 frames change of shooting each frame
             if self.frame_count % 120 == 0:
                 enemy_bullet = arcade.Sprite(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_ENEMY_BULLET)
@@ -965,19 +1010,23 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
             if enemy_bullet.top < 0:
                 enemy_bullet.remove_from_sprite_lists()
 
-        # Check to see if an enemy bullet has hit the player
+
+        """"# Check to see if an enemy bullet has hit the player
         # if it has, remove a heart
         enemy_bullet_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
                                                         self.rooms[self.current_room].enemy_bullet_list)
         for enemy_bullet in enemy_bullet_hit_list:
             enemy_bullet.remove_from_sprite_lists()
-            self.hearts -= 1
+            self.hearts -= 1"""
 
         health_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
                                                         self.rooms[self.current_room].health_power_up_list)
         for health_star in health_hit_list:
             health_star.remove_from_sprite_lists()
             self.hearts += 1
+
+        # get ride of the enemy if you shoot it
+
 
         """self.rooms[self.current_room].health_power_up_list.update()"""
         """DO I NEED THIS LINE ABOVE?????????????????_---------------------------------------------------"""
