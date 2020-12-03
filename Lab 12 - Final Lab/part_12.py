@@ -17,11 +17,11 @@ SPRITE_SCALING_FLOWER_COIN = 0.2
 SPRITE_SCALING_SNOWBALL_COIN = 0.2
 SPRITE_SCALING_LEAF_COIN = 0.2
 SPRITE_SCALING_SUN_COIN = 0.2
-SPRITE_SCALING_ENEMY_BEE = 0.4
-SPRITE_SCALING_ENEMY_CRAB = 0.5
+SPRITE_SCALING_ENEMY_WASP = 0.4
+SPRITE_SCALING_ENEMY_CRAB = 0.35
 SPRITE_SCALING_ENEMY_PUMPKIN = 0.6
 SPRITE_SCALING_ENEMY_SANTA = 0.6
-SPRITE_SCALING_PLAYER = 0.2
+SPRITE_SCALING_PLAYER = 0.15
 SPRITE_SCALING_PLAYER_BULLET = 0.5
 SPRITE_SCALING_ENEMY_BULLET = 0.5
 SPRITE_SCALING_HEALTH_STAR = 0.2
@@ -229,54 +229,145 @@ def setup_room_1():
 
     # -- Set up the walls
     # BORDERS
+    """Borders"""
     # left wall
     for y in range(34, 700, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("dirtCenter.png", SPRITE_SCALING)
         wall.center_x = 34
         wall.center_y = y
         room.wall_list.append(wall)
 
     # right wall (top part)
     for y in range(560, 730, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("dirtCenter.png", SPRITE_SCALING)
         wall.center_x = 866
         wall.center_y = y
         room.wall_list.append(wall)
     # right wall (bottom part)
     for y in range(34, 230, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("dirtCenter.png", SPRITE_SCALING)
         wall.center_x = 866
         wall.center_y = y
         room.wall_list.append(wall)
 
     # bottom wall
     for x in range(34, 900, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("dirtCenter.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 34
         room.wall_list.append(wall)
     # top wall
     for x in range(34, 900, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("dirtCenter.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 738
         room.wall_list.append(wall)
 
     #INSIDE WALLS
-    for x in range(200, 500, 64):
+    """for x in range(200, 500, 64):
         wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 300
-        room.wall_list.append(wall)
+        room.wall_list.append(wall)"""
 
     # If you want coins or monsters in a level, then add that code here.
-    # bee enemy
-    bee_enemy = arcade.Sprite("enemy_bee.png", SPRITE_SCALING_ENEMY_BEE)
-    bee_enemy.center_x = 400
-    bee_enemy.center_y = 300
-    bee_enemy.angle = 180
-    room.enemy_list.append(bee_enemy)
+    # wasp enemy
+    wasp_enemy = arcade.Sprite("enemy_wasp.png", SPRITE_SCALING_ENEMY_WASP)
+    wasp_enemy.center_x = 150
+    wasp_enemy.center_y = 600
+    wasp_enemy.angle = 180
+    room.enemy_list.append(wasp_enemy)
 
+    wasp_enemy = arcade.Sprite("enemy_wasp.png", SPRITE_SCALING_ENEMY_WASP)
+    wasp_enemy.center_x = 700
+    wasp_enemy.center_y = 240
+    wasp_enemy.angle = 180
+    room.enemy_list.append(wasp_enemy)
+
+    """Inner Walls"""
+    # 1
+    for x in range(80, 300, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 180
+        room.wall_list.append(wall)
+    for x in range(430, 530, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 180
+        room.wall_list.append(wall)
+    for x in range(650, 750, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 180
+        room.wall_list.append(wall)
+    # 2
+    # group 1
+    # --- Place walls with a list
+    coordinate_list = [[280, 320],
+                       [350, 320],
+                       [280, 390],
+                       [350, 390]]
+    # Loop through coordinates
+    for coordinate in coordinate_list:
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = coordinate[0]
+        wall.center_y = coordinate[1]
+        room.wall_list.append(wall)
+
+    for x in range(210, 240, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 350
+        room.wall_list.append(wall)
+
+    for y in range(320, 420, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = 580
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(510, 560, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 380
+        room.wall_list.append(wall)
+
+    for x in range(600, 650, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 570
+        room.wall_list.append(wall)
+
+    for x in range(710, 780, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 450
+        room.wall_list.append(wall)
+
+    for x in range(720, 770, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 315
+        room.wall_list.append(wall)
+
+    for y in range(550, 650, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = 445
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(90, 140, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 490
+        room.wall_list.append(wall)
+
+    for x in range(250, 320, 64):
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 579
+        room.wall_list.append(wall)
 
     # Scatter the coins
     # Flower coins
@@ -374,6 +465,56 @@ def setup_room_2():
     health_star.center_y = 400
     health_star.angle = 180
     room.health_power_up_list.append(health_star)
+
+    """Inner walls"""
+
+    for y in range(170, 300, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 170
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for y in range(400, 500, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 300
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for y in range(500, 570, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = 105
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(3, 900, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 738
+        room.wall_list.append(wall)
+
+    for x in range(300, 450, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 200
+        room.wall_list.append(wall)
+
+    for x in range(550, 700, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 400
+        room.wall_list.append(wall)
+
+    for x in range(600, 700, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 100
+        room.wall_list.append(wall)
+
+    for x in range(500, 600, 64):
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 600
+        room.wall_list.append(wall)
 
     # Scatter the coins
     # Sun coins
@@ -686,8 +827,10 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         # Our starting room number
         self.current_room = 0
 
+
         # Create a physics engine for this room
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.rooms[self.current_room].wall_list)
+        """self.physics_engine = arcade.PhysicsEngineSimple(self.player_bullet, self.rooms[self.current_room].wall_list)"""
 
         # Set the viewport boundaries
         # These numbers set where we have 'scrolled' to.
@@ -870,7 +1013,7 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         # every time you add a room, you need to add two statements to be able to enter the next room and be able
         # to go back to the previous room, if you only had one elif statement, then you could enter the net room
         # but not able to go back to the previous room
-        print(self.player_sprite.center_x)
+        # print(self.player_sprite.center_x)
         if self.player_sprite.center_x > 880 and self.current_room == 0:
             self.current_room = 1 # Screen width = 800
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
