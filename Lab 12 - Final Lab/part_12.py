@@ -19,7 +19,7 @@ SPRITE_SCALING_LEAF_COIN = 0.2
 SPRITE_SCALING_SUN_COIN = 0.2
 SPRITE_SCALING_ENEMY_WASP = 0.4
 SPRITE_SCALING_ENEMY_CRAB = 0.35
-SPRITE_SCALING_ENEMY_PUMPKIN = 0.6
+SPRITE_SCALING_ENEMY_PUMPKIN = 0.4
 SPRITE_SCALING_ENEMY_SANTA = 0.6
 SPRITE_SCALING_PLAYER = 0.15
 SPRITE_SCALING_PLAYER_BULLET = 0.5
@@ -31,7 +31,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 640
 SCREEN_TITLE = "Sprite Rooms Example"
 
-MOVEMENT_SPEED = 20
+MOVEMENT_SPEED = 25
 TEXTURE_LEFT = 0
 TEXTURE_RIGHT = 1
 
@@ -272,17 +272,17 @@ def setup_room_1():
 
     # If you want coins or monsters in a level, then add that code here.
     # wasp enemy
-    wasp_enemy = arcade.Sprite("enemy_wasp.png", SPRITE_SCALING_ENEMY_WASP)
+    """wasp_enemy = arcade.Sprite("enemy_wasp.png", SPRITE_SCALING_ENEMY_WASP)
     wasp_enemy.center_x = 150
     wasp_enemy.center_y = 600
-    wasp_enemy.angle = 180
-    room.enemy_list.append(wasp_enemy)
+    wasp_enemy.angle = 0
+    room.enemy_list.append(wasp_enemy)"""
 
-    wasp_enemy = arcade.Sprite("enemy_wasp.png", SPRITE_SCALING_ENEMY_WASP)
+    """wasp_enemy = arcade.Sprite("enemy_wasp.png", SPRITE_SCALING_ENEMY_WASP)
     wasp_enemy.center_x = 700
     wasp_enemy.center_y = 240
-    wasp_enemy.angle = 180
-    room.enemy_list.append(wasp_enemy)
+    wasp_enemy.angle = 0
+    room.enemy_list.append(wasp_enemy)"""
 
     """Inner Walls"""
     # 1
@@ -455,14 +455,20 @@ def setup_room_2():
 
     # crab enemy
     crab_enemy = arcade.Sprite("enemy_crab.png", SPRITE_SCALING_ENEMY_CRAB)
-    crab_enemy.center_x = 400
-    crab_enemy.center_y = 300
+    crab_enemy.center_x = 260
+    crab_enemy.center_y = 400
+    crab_enemy.angle = 180
+    room.enemy_list.append(crab_enemy)
+
+    crab_enemy = arcade.Sprite("enemy_crab.png", SPRITE_SCALING_ENEMY_CRAB)
+    crab_enemy.center_x = 630
+    crab_enemy.center_y = 625
     crab_enemy.angle = 180
     room.enemy_list.append(crab_enemy)
 
     health_star = arcade.Sprite("health_star.png", SPRITE_SCALING_HEALTH_STAR)
-    health_star.center_x = 380
-    health_star.center_y = 400
+    health_star.center_x = 410
+    health_star.center_y = 620
     health_star.angle = 180
     room.health_power_up_list.append(health_star)
 
@@ -481,19 +487,19 @@ def setup_room_2():
         room.wall_list.append(wall)
 
     for x in range(290, 420, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 170
         room.wall_list.append(wall)
 
     for x in range(200, 300, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 300
         room.wall_list.append(wall)
 
     for x in range(550, 700, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 300
         room.wall_list.append(wall)
@@ -511,7 +517,7 @@ def setup_room_2():
         room.wall_list.append(wall)
 
     for x in range(515, 680, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 500
         room.wall_list.append(wall)
@@ -528,19 +534,19 @@ def setup_room_2():
                        [340, 610]]
     # Loop through coordinates
     for coordinate in coordinate_list:
-        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = coordinate[0]
         wall.center_y = coordinate[1]
         room.wall_list.append(wall)
 
     for x in range(500, 600, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 700
         room.wall_list.append(wall)
 
     for x in range(700, 800, 64):
-        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall = arcade.Sprite("grass.png", SPRITE_SCALING)
         wall.center_x = x
         wall.center_y = 170
         room.wall_list.append(wall)
@@ -635,17 +641,130 @@ def setup_room_3():
     # If you want coins or monsters in a level, then add that code here.
     # crab enemy
     pumpkin_enemy = arcade.Sprite("enemy_pumpkin.png", SPRITE_SCALING_ENEMY_PUMPKIN)
-    pumpkin_enemy.center_x = 400
-    pumpkin_enemy.center_y = 300
+    pumpkin_enemy.center_x = 605
+    pumpkin_enemy.center_y = 670
+    pumpkin_enemy.angle = 180
+    room.enemy_list.append(pumpkin_enemy)
+
+    pumpkin_enemy = arcade.Sprite("enemy_pumpkin.png", SPRITE_SCALING_ENEMY_PUMPKIN)
+    pumpkin_enemy.center_x = 605
+    pumpkin_enemy.center_y = 670
+    pumpkin_enemy.angle = 180
+    room.enemy_list.append(pumpkin_enemy)
+
+    pumpkin_enemy = arcade.Sprite("enemy_pumpkin.png", SPRITE_SCALING_ENEMY_PUMPKIN)
+    pumpkin_enemy.center_x = 440
+    pumpkin_enemy.center_y = 170
     pumpkin_enemy.angle = 180
     room.enemy_list.append(pumpkin_enemy)
 
     health_star = arcade.Sprite("health_star.png", SPRITE_SCALING_HEALTH_STAR)
-    health_star.center_x = 380
-    health_star.center_y = 400
+    health_star.center_x = 700
+    health_star.center_y = 120
     health_star.angle = 180
     room.health_power_up_list.append(health_star)
 
+    """Inner walls"""
+    for x in range(140, 300, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 170
+        room.wall_list.append(wall)
+
+    for x in range(250, 300, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 320
+        room.wall_list.append(wall)
+
+    for x in range(120, 170, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 420
+        room.wall_list.append(wall)
+
+    for y in range(280, 440, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 380
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(145, 330, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 560
+        room.wall_list.append(wall)
+
+    for x in range(250, 310, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 495
+        room.wall_list.append(wall)
+
+    for y in range(610, 675, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 410
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for y in range(680, 745, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 710
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(590, 640, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 570
+        room.wall_list.append(wall)
+
+    for x in range(440, 600, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 380
+        room.wall_list.append(wall)
+
+    for x in range(440, 600, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 380
+        room.wall_list.append(wall)
+
+    coordinate_list = [[530, 170], #240
+                       [600, 170], # 240
+                       [530, 240], # 310
+                       [600, 240]] # 310
+    # Loop through coordinates
+    for coordinate in coordinate_list:
+        wall = arcade.Sprite("dirt.png", SPRITE_SCALING)
+        wall.center_x = coordinate[0]
+        wall.center_y = coordinate[1]
+        room.wall_list.append(wall)
+
+    for x in range(665, 770, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 200
+        room.wall_list.append(wall)
+
+    for y in range(360, 550, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = 750
+        wall.center_y = y
+        room.wall_list.append(wall)
+
+    for x in range(560, 640, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 510
+        room.wall_list.append(wall)
+
+    for x in range(570, 620, 64):
+        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+        wall.center_x = x
+        wall.center_y = 100
+        room.wall_list.append(wall)
 
     # Scatter the coins
     # Leaf coins
