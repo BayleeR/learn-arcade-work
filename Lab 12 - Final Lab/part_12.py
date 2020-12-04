@@ -1,9 +1,6 @@
-"""Sprite move between different rooms.
-
-Artwork from http://kenney.nl
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_rooms"""
+"""
+Mother Nature's Crisis
+"""
 
 
 import arcade
@@ -29,7 +26,7 @@ SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 640
-SCREEN_TITLE = "Sprite Rooms Example"
+SCREEN_TITLE = "Mother Nature's Crisis"
 
 MOVEMENT_SPEED = 8
 TEXTURE_LEFT = 0
@@ -190,7 +187,6 @@ class Room:
         self.player_bullet_list = None
         self.enemy_bullet_list = arcade.SpriteList()
 
-
         # This holds the background images. If you don't want changing
         # background images, you can delete this part.
         self.background = None
@@ -209,7 +205,6 @@ def setup_room_1():
     room.coin_list = arcade.SpriteList()
     room.enemy_list = arcade.SpriteList()
 
-
     # -- Set up the walls
     # BORDERS
     """Borders"""
@@ -227,6 +222,7 @@ def setup_room_1():
         wall.center_x = 866
         wall.center_y = y
         room.wall_list.append(wall)
+
     # right wall (bottom part)
     for y in range(34, 230, 64):
         wall = arcade.Sprite("stoneCenter.png", SPRITE_SCALING)
@@ -247,7 +243,7 @@ def setup_room_1():
         wall.center_y = 738
         room.wall_list.append(wall)
 
-    #INSIDE WALLS
+    # INSIDE WALLS
 
     # If you want coins or monsters in a level, then add that code here.
     # Wasp image from OpenGameArt
@@ -369,7 +365,6 @@ def setup_room_1():
 
         # Add the coin to the lists
         room.coin_list.append(flower_coin)
-
 
     # Background from OpenGameArt
     room.background = arcade.load_texture("backgroundextended.png")
@@ -536,7 +531,6 @@ def setup_room_2():
         wall.center_y = y
         room.wall_list.append(wall)
 
-
     # Scatter the coins
     # Sun coins
     for i in range(10):
@@ -637,7 +631,7 @@ def setup_room_3():
     room.health_power_up_list.append(health_star)
 
     """Inner walls"""
-    # Planet inage from kenny.nl
+    # Planet image from kenny.nl
     for x in range(140, 300, 64):
         wall = arcade.Sprite("planet.png", SPRITE_SCALING)
         wall.center_x = x
@@ -737,7 +731,6 @@ def setup_room_3():
         wall.center_x = x
         wall.center_y = 100
         room.wall_list.append(wall)
-
 
     # Scatter the coins
     # Leaf image from WikiMedia Commons
@@ -959,20 +952,18 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         self.enemy_list = None
         self.health_power_up_list = None
         self.player_bullet_list = None
-        self.enemy_bullet_list = None               # maybe add bullet list instead of two different bullet lists
+        self.enemy_bullet_list = None
 
         self.frame_count = 0
 
         # Total coin count
         self.total_coin_count = 0
 
-
         # Score
         self.score = 0
 
         # Lives
         self.hearts = 3
-
 
         # Set up the player
         self.player_sprite = None
@@ -1035,7 +1026,6 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         # Our starting room number
         self.current_room = 0
 
-
         # Create a physics engine for this room
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.rooms[self.current_room].wall_list)
 
@@ -1057,8 +1047,6 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             900, 790,
                                             self.rooms[self.current_room].background)
-                                            #used to be 0, 0, screen_width, screen_height
-                                            # 0, 0, 900, 790
 
         # Draw all the walls in this room
         self.rooms[self.current_room].wall_list.draw()
@@ -1164,7 +1152,6 @@ class GameView(arcade.View): # was MyGame(arcade.Window)
                                 SCREEN_HEIGHT + self.view_bottom)
             return     
 
-            
         # win
         if self.total_coin_count == 40:
             view = WinView()
